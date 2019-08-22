@@ -20,6 +20,14 @@ input.addEventListener('change', function(e){
       const imageData = context.getImageData( 0, 0, canvas.width, canvas.height)
       const data = imageData.data
       
+      if(canvas.width > document.documentElement.clientWidth){
+        if(canvas.height > document.documentElement.clientHeight){
+          canvas.style.height = "80vh";
+        }else{
+          canvas.style.width = "90vw";
+        } 
+      }
+      
       document.body.appendChild(canvas)
     }
     img.src = reader.result
