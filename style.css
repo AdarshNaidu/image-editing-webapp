@@ -7,6 +7,10 @@ html, body{
   margin : 0;
 }
 
+body{
+  padding: 10px;
+}
+
 
 canvas{
   display : block;
@@ -18,10 +22,37 @@ label, input{
 }
 
 label{
-  border-left: 1px solid black;
-  margin-left: 5px;
+  
+}
+
+.controls{
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.controls div{
+  padding: 10px;
+  background-color: lightgreen;
+  border-radius: 5px;
+  margin: 10px;
 }
 
 input{
-  margin: 10px 30px 10px 0;
+  margin: 0 5px;
+}
+
+button{
+  margin: 10px;
+}
+
+canvas{
+  max-width: calc(100vw - 30px);
+}
+
+@media only screen and (max-width: 600px){
+  .controls{
+    flex-flow: column;
+  }
 }
