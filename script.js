@@ -40,6 +40,47 @@ input.addEventListener('change', function(e){
 
 
 
+let urlInput = document.querySelector('input[name = "url"]');
+urlInput.addEventListener('keydown', function(event){
+      if(event.keyCode===13){
+        canvas = document.querySelectorAll('canvas')[0];
+        if(canvas){
+          handlers.reset();
+          canvas.parentNode.removeChild(canvas);
+        }
+        appendCanvas(urlInput.value);
+        urlInput.value = "";
+      }
+    });
+
+
+function appendCanvas(url){
+  let img = document.createElement('img');
+  img.src = url;
+  console.log(url);
+  img.onload = function(){
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+      canvas.width = img.width
+      canvas.height = img.height
+      context.drawImage(img, 0, 0)
+      
+      // const imageData = context.getImageData( 0, 0, canvas.width, canvas.height)
+      // const data = imageData.data
+      
+      if(canvas.width > document.documentElement.clientWidth){
+        if(canvas.height > document.documentElement.clientHeight){
+          canvas.style.height = "80vh";
+        }else{
+          canvas.style.width = "90vw";
+        } 
+      }
+      
+      document.body.appendChild(canvas)
+    }
+}
+
+
 
 
 let properties = {
@@ -68,33 +109,33 @@ let properties = {
 
 
 let handlers = {
-  canvas : document.querySelectorAll('canvas')[0],
-  changeBrightness : function(val){
-    canvas = document.querySelectorAll('canvas')[0];
-    canvas.style.transition = "all 0.3s";
-    // canvas.style.filter = "brightness("+properties.brightness+")";
-    canvas.style.filter = "grayscale("+val+")";
-  },
-  changeSaturation : function(val){
-    canvas = document.querySelectorAll('canvas')[0];
-    canvas.style.transition = "all 0.3s";
-    canvas.style.filter = "saturate("+properties.saturation+")";
-  },
-  changeContrast : function(val){
-    canvas = document.querySelectorAll('canvas')[0];
-    canvas.style.transition = "all 0.3s";
-    canvas.style.filter = "contrast("+properties.contrast+")";
-  },
-  changeBlur : function(val){
-    canvas = document.querySelectorAll('canvas')[0];
-    canvas.style.transition = "all 0.3s";
-    canvas.style.filter = "blur(+"+properties.blur+"px)";
-  },
-  changeGrayscale : function(val){
-    canvas = document.querySelectorAll('canvas')[0];
-    canvas.style.transition = "all 0.3s";
-    canvas.style.filter = "grayscale(+"+properties.grayscale+")";
-  },
+  // canvas : document.querySelectorAll('canvas')[0],
+  // changeBrightness : function(val){
+  //   canvas = document.querySelectorAll('canvas')[0];
+  //   canvas.style.transition = "all 0.3s";
+  //   // canvas.style.filter = "brightness("+properties.brightness+")";
+  //   canvas.style.filter = "grayscale("+val+")";
+  // },
+  // changeSaturation : function(val){
+  //   canvas = document.querySelectorAll('canvas')[0];
+  //   canvas.style.transition = "all 0.3s";
+  //   canvas.style.filter = "saturate("+properties.saturation+")";
+  // },
+  // changeContrast : function(val){
+  //   canvas = document.querySelectorAll('canvas')[0];
+  //   canvas.style.transition = "all 0.3s";
+  //   canvas.style.filter = "contrast("+properties.contrast+")";
+  // },
+  // changeBlur : function(val){
+  //   canvas = document.querySelectorAll('canvas')[0];
+  //   canvas.style.transition = "all 0.3s";
+  //   canvas.style.filter = "blur(+"+properties.blur+"px)";
+  // },
+  // changeGrayscale : function(val){
+  //   canvas = document.querySelectorAll('canvas')[0];
+  //   canvas.style.transition = "all 0.3s";
+  //   canvas.style.filter = "grayscale(+"+properties.grayscale+")";
+  // },
   reset : function(){
     // canvas = document.querySelectorAll('canvas')[0];
     // canvas.style.transition = "all 0.3s";
@@ -114,17 +155,41 @@ let handlers = {
     contrastSlider.value = 1;
     blurSlider.value = 0;
     grayscaleSlider.value = 0;
+    this.apply();
   },
   apply : function(val){
     properties.getProperties();
     canvas = document.querySelectorAll('canvas')[0];
     canvas.style.transition = "all 0.3s";
     canvas.style.filter = "brightness("+properties.brightness+") saturate("+properties.saturation+") contrast("+properties.contrast+") blur("+properties.blur+"px) grayscale("+properties.grayscale+")";
+    let inputs = document.querySelectorAll(".controls input");
+    inputs.forEach(function(input){
+      let value = document.createElement('span');
+      value.innerHTML = input.value;
+      let elem = input.nextSibling;
+      elem.parentNode.removeChild(elem)
+      input.parentNode.insertBefore(value, input.nextSibling);
+    })
+  },
+  download : function(){
+    canvas = document.querySelectorAll('canvas')[0];
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = canvas.toDataURL();
+    a.download = "canvas-image.png";
+    a.click();
+    document.body.removeChild(a);
   },
   setUpEventListeners : function(){
     let inputs = document.querySelectorAll(".controls input");
 
     inputs.forEach(input => input.addEventListener('change', handlers.apply));
+    
+    inputs.forEach(function(input){
+      let value = document.createElement('span');
+      value.innerHTML = input.value;
+      input.parentNode.insertBefore(value, input.nextSibling);
+    })
     
   }
   
