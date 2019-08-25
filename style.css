@@ -17,6 +17,11 @@ label, input{
   display : inline;
 }
 
+label{
+  border-left: 1px solid black;
+  margin-left: 5px;
+}
+
 input{
   margin: 10px 30px 10px 0;
 }
